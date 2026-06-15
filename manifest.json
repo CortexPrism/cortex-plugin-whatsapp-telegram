@@ -1,0 +1,160 @@
+{
+  "name": "cortex-plugin-whatsapp-telegram",
+  "version": "1.0.0",
+  "description": "Lightweight messaging bridge for quick queries and notifications",
+  "kind": "esm",
+  "entryPoint": "mod.ts",
+  "runtime": "deno",
+  "author": "CortexPrism",
+  "license": "MIT",
+  "repository": "https://github.com/CortexPrism/cortex-plugin-whatsapp-telegram",
+  "homepage": "",
+  "capabilities": [
+    "tools",
+    "network:fetch"
+  ],
+  "tools": [
+    {
+      "name": "whatsapp_send",
+      "description": "Send a WhatsApp message",
+      "params": [
+        {
+          "name": "to",
+          "type": "string",
+          "description": "Recipient phone number",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Message content",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "telegram_send",
+      "description": "Send a Telegram message",
+      "params": [
+        {
+          "name": "chat_id",
+          "type": "string",
+          "description": "Telegram chat ID",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Message content",
+          "required": true
+        },
+        {
+          "name": "parse_mode",
+          "type": "string",
+          "description": "Message parse mode",
+          "required": false,
+          "enum": ["HTML", "Markdown", "text"],
+          "default": "text"
+        }
+      ]
+    },
+    {
+      "name": "telegram_read",
+      "description": "Read recent Telegram messages",
+      "params": [
+        {
+          "name": "chat_id",
+          "type": "string",
+          "description": "Telegram chat ID",
+          "required": true
+        },
+        {
+          "name": "limit",
+          "type": "number",
+          "description": "Maximum number of messages",
+          "required": false,
+          "default": 20
+        }
+      ]
+    },
+    {
+      "name": "bridge_send_alert",
+      "description": "Send alert to all configured platforms",
+      "params": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Alert message",
+          "required": true
+        },
+        {
+          "name": "priority",
+          "type": "string",
+          "description": "Alert priority level",
+          "required": true,
+          "enum": ["info", "warning", "critical"]
+        },
+        {
+          "name": "platforms",
+          "type": "string",
+          "description": "Comma-separated platforms: whatsapp,telegram",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "bridge_status",
+      "description": "Check bridge configuration status",
+      "params": []
+    },
+    {
+      "name": "bridge_set_webhook",
+      "description": "Configure webhook for Telegram",
+      "params": [
+        {
+          "name": "url",
+          "type": "string",
+          "description": "Webhook URL",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "section": "Messaging Bridge",
+    "fields": [
+      {
+        "key": "whatsappApiKey",
+        "label": "WhatsApp API Key",
+        "type": "secret",
+        "description": "WhatsApp Business API key"
+      },
+      {
+        "key": "whatsappPhoneId",
+        "label": "WhatsApp Phone ID",
+        "type": "text",
+        "description": "WhatsApp phone number ID"
+      },
+      {
+        "key": "telegramBotToken",
+        "label": "Telegram Bot Token",
+        "type": "secret",
+        "description": "Telegram bot token from BotFather"
+      },
+      {
+        "key": "telegramDefaultChatId",
+        "label": "Telegram Default Chat ID",
+        "type": "text",
+        "description": "Default Telegram chat ID for messages"
+      }
+    ]
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "cortex": ">=1.0.0"
+  },
+  "aiDisclosure": {
+    "tools": ["Claude Code (Anthropic)"],
+    "humanReview": true
+  }
+}
