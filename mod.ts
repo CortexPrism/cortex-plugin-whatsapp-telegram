@@ -1,4 +1,4 @@
-import type { Tool, ToolContext, PluginContext, ToolCallResult } from 'cortex/plugins';
+import type { PluginContext, Tool, ToolCallResult, ToolContext } from './types.ts';
 
 let pluginConfig: Record<string, unknown> = {};
 
@@ -25,14 +25,26 @@ const whatsappSendTool: Tool = {
       const message = args.message as string;
 
       if (!to || !message) {
-        return { toolName: 'whatsapp_send', success: false, output: '', error: 'to and message are required', durationMs: Date.now() - start };
+        return {
+          toolName: 'whatsapp_send',
+          success: false,
+          output: '',
+          error: 'to and message are required',
+          durationMs: Date.now() - start,
+        };
       }
 
       const apiKey = pluginConfig.whatsappApiKey as string;
       const phoneId = pluginConfig.whatsappPhoneId as string;
 
       if (!apiKey || !phoneId) {
-        return { toolName: 'whatsapp_send', success: false, output: '', error: 'WhatsApp not configured. Set whatsappApiKey and whatsappPhoneId.', durationMs: Date.now() - start };
+        return {
+          toolName: 'whatsapp_send',
+          success: false,
+          output: '',
+          error: 'WhatsApp not configured. Set whatsappApiKey and whatsappPhoneId.',
+          durationMs: Date.now() - start,
+        };
       }
 
       const response = await fetch(
@@ -53,13 +65,32 @@ const whatsappSendTool: Tool = {
       );
 
       if (!response.ok) {
-        return { toolName: 'whatsapp_send', success: false, output: '', error: `WhatsApp API error: ${response.status}`, durationMs: Date.now() - start };
+        return {
+          toolName: 'whatsapp_send',
+          success: false,
+          output: '',
+          error: `WhatsApp API error: ${response.status}`,
+          durationMs: Date.now() - start,
+        };
       }
 
       const data = await response.json();
-      return { toolName: 'whatsapp_send', success: true, output: JSON.stringify(data), durationMs: Date.now() - start };
+      return {
+        toolName: 'whatsapp_send',
+        success: true,
+        output: JSON.stringify(data),
+        durationMs: Date.now() - start,
+      };
     } catch (error) {
-      return { toolName: 'whatsapp_send', success: false, output: '', error: `Failed to send WhatsApp message: ${error instanceof Error ? error.message : String(error)}`, durationMs: Date.now() - start };
+      return {
+        toolName: 'whatsapp_send',
+        success: false,
+        output: '',
+        error: `Failed to send WhatsApp message: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        durationMs: Date.now() - start,
+      };
     }
   },
 };
@@ -71,7 +102,14 @@ const telegramSendTool: Tool = {
     params: [
       { name: 'chat_id', type: 'string', description: 'Telegram chat ID', required: true },
       { name: 'message', type: 'string', description: 'Message content', required: true },
-      { name: 'parse_mode', type: 'string', description: 'Message parse mode', required: false, enum: ['HTML', 'Markdown', 'text'], default: 'text' },
+      {
+        name: 'parse_mode',
+        type: 'string',
+        description: 'Message parse mode',
+        required: false,
+        enum: ['HTML', 'Markdown', 'text'],
+        default: 'text',
+      },
     ],
     capabilities: ['network:fetch'],
   },
@@ -82,12 +120,24 @@ const telegramSendTool: Tool = {
       const message = args.message as string;
 
       if (!chatId || !message) {
-        return { toolName: 'telegram_send', success: false, output: '', error: 'chat_id and message are required', durationMs: Date.now() - start };
+        return {
+          toolName: 'telegram_send',
+          success: false,
+          output: '',
+          error: 'chat_id and message are required',
+          durationMs: Date.now() - start,
+        };
       }
 
       const botToken = pluginConfig.telegramBotToken as string;
       if (!botToken) {
-        return { toolName: 'telegram_send', success: false, output: '', error: 'Telegram not configured. Set telegramBotToken.', durationMs: Date.now() - start };
+        return {
+          toolName: 'telegram_send',
+          success: false,
+          output: '',
+          error: 'Telegram not configured. Set telegramBotToken.',
+          durationMs: Date.now() - start,
+        };
       }
 
       const parseMode = (args.parse_mode as string) ?? 'text';
@@ -106,13 +156,32 @@ const telegramSendTool: Tool = {
       );
 
       if (!response.ok) {
-        return { toolName: 'telegram_send', success: false, output: '', error: `Telegram API error: ${response.status}`, durationMs: Date.now() - start };
+        return {
+          toolName: 'telegram_send',
+          success: false,
+          output: '',
+          error: `Telegram API error: ${response.status}`,
+          durationMs: Date.now() - start,
+        };
       }
 
       const data = await response.json();
-      return { toolName: 'telegram_send', success: true, output: JSON.stringify(data), durationMs: Date.now() - start };
+      return {
+        toolName: 'telegram_send',
+        success: true,
+        output: JSON.stringify(data),
+        durationMs: Date.now() - start,
+      };
     } catch (error) {
-      return { toolName: 'telegram_send', success: false, output: '', error: `Failed to send Telegram message: ${error instanceof Error ? error.message : String(error)}`, durationMs: Date.now() - start };
+      return {
+        toolName: 'telegram_send',
+        success: false,
+        output: '',
+        error: `Failed to send Telegram message: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        durationMs: Date.now() - start,
+      };
     }
   },
 };
@@ -123,7 +192,13 @@ const telegramReadTool: Tool = {
     description: 'Read recent Telegram messages',
     params: [
       { name: 'chat_id', type: 'string', description: 'Telegram chat ID', required: true },
-      { name: 'limit', type: 'number', description: 'Maximum number of messages', required: false, default: 20 },
+      {
+        name: 'limit',
+        type: 'number',
+        description: 'Maximum number of messages',
+        required: false,
+        default: 20,
+      },
     ],
     capabilities: ['network:fetch'],
   },
@@ -132,12 +207,24 @@ const telegramReadTool: Tool = {
     try {
       const chatId = args.chat_id as string;
       if (!chatId) {
-        return { toolName: 'telegram_read', success: false, output: '', error: 'chat_id is required', durationMs: Date.now() - start };
+        return {
+          toolName: 'telegram_read',
+          success: false,
+          output: '',
+          error: 'chat_id is required',
+          durationMs: Date.now() - start,
+        };
       }
 
       const botToken = pluginConfig.telegramBotToken as string;
       if (!botToken) {
-        return { toolName: 'telegram_read', success: false, output: '', error: 'Telegram not configured', durationMs: Date.now() - start };
+        return {
+          toolName: 'telegram_read',
+          success: false,
+          output: '',
+          error: 'Telegram not configured',
+          durationMs: Date.now() - start,
+        };
       }
 
       const limit = (args.limit as number) ?? 20;
@@ -147,25 +234,44 @@ const telegramReadTool: Tool = {
       );
 
       if (!response.ok) {
-        return { toolName: 'telegram_read', success: false, output: '', error: `Telegram API error: ${response.status}`, durationMs: Date.now() - start };
+        return {
+          toolName: 'telegram_read',
+          success: false,
+          output: '',
+          error: `Telegram API error: ${response.status}`,
+          durationMs: Date.now() - start,
+        };
       }
 
       const data = await response.json();
       const messages = (data.result || []).map((update: Record<string, unknown>) => {
-        const msg = update.message as Record<string, unknown> || update.edited_message as Record<string, unknown>;
+        const msg = update.message as Record<string, unknown> ||
+          update.edited_message as Record<string, unknown>;
         if (!msg) return null;
         return {
           message_id: msg.message_id,
           chat_id: (msg.chat as Record<string, unknown>)?.id,
-          from: (msg.from as Record<string, unknown>)?.username || (msg.from as Record<string, unknown>)?.first_name,
+          from: (msg.from as Record<string, unknown>)?.username ||
+            (msg.from as Record<string, unknown>)?.first_name,
           text: msg.text,
           date: msg.date,
         };
       }).filter(Boolean);
 
-      return { toolName: 'telegram_read', success: true, output: JSON.stringify(messages), durationMs: Date.now() - start };
+      return {
+        toolName: 'telegram_read',
+        success: true,
+        output: JSON.stringify(messages),
+        durationMs: Date.now() - start,
+      };
     } catch (error) {
-      return { toolName: 'telegram_read', success: false, output: '', error: `Failed to read messages: ${error instanceof Error ? error.message : String(error)}`, durationMs: Date.now() - start };
+      return {
+        toolName: 'telegram_read',
+        success: false,
+        output: '',
+        error: `Failed to read messages: ${error instanceof Error ? error.message : String(error)}`,
+        durationMs: Date.now() - start,
+      };
     }
   },
 };
@@ -176,8 +282,19 @@ const bridgeSendAlertTool: Tool = {
     description: 'Send alert to all configured platforms',
     params: [
       { name: 'message', type: 'string', description: 'Alert message', required: true },
-      { name: 'priority', type: 'string', description: 'Alert priority level', required: true, enum: ['info', 'warning', 'critical'] },
-      { name: 'platforms', type: 'string', description: 'Comma-separated platforms: whatsapp,telegram', required: false },
+      {
+        name: 'priority',
+        type: 'string',
+        description: 'Alert priority level',
+        required: true,
+        enum: ['info', 'warning', 'critical'],
+      },
+      {
+        name: 'platforms',
+        type: 'string',
+        description: 'Comma-separated platforms: whatsapp,telegram',
+        required: false,
+      },
     ],
     capabilities: ['network:fetch'],
   },
@@ -188,15 +305,29 @@ const bridgeSendAlertTool: Tool = {
       const priority = args.priority as string;
 
       if (!message || !priority) {
-        return { toolName: 'bridge_send_alert', success: false, output: '', error: 'message and priority are required', durationMs: Date.now() - start };
+        return {
+          toolName: 'bridge_send_alert',
+          success: false,
+          output: '',
+          error: 'message and priority are required',
+          durationMs: Date.now() - start,
+        };
       }
 
       if (!['info', 'warning', 'critical'].includes(priority)) {
-        return { toolName: 'bridge_send_alert', success: false, output: '', error: 'priority must be one of: info, warning, critical', durationMs: Date.now() - start };
+        return {
+          toolName: 'bridge_send_alert',
+          success: false,
+          output: '',
+          error: 'priority must be one of: info, warning, critical',
+          durationMs: Date.now() - start,
+        };
       }
 
       const platformsStr = args.platforms as string | undefined;
-      const targets = platformsStr ? platformsStr.split(',').map((p) => p.trim().toLowerCase()) : ['whatsapp', 'telegram'];
+      const targets = platformsStr
+        ? platformsStr.split(',').map((p) => p.trim().toLowerCase())
+        : ['whatsapp', 'telegram'];
 
       const prefix = { info: '[INFO]', warning: '[WARNING]', critical: '[CRITICAL]' }[priority];
       const formattedMessage = `${prefix} ${message}`;
@@ -237,9 +368,20 @@ const bridgeSendAlertTool: Tool = {
         }
       }
 
-      return { toolName: 'bridge_send_alert', success: true, output: results.join('\n'), durationMs: Date.now() - start };
+      return {
+        toolName: 'bridge_send_alert',
+        success: true,
+        output: results.join('\n'),
+        durationMs: Date.now() - start,
+      };
     } catch (error) {
-      return { toolName: 'bridge_send_alert', success: false, output: '', error: `Failed to send alert: ${error instanceof Error ? error.message : String(error)}`, durationMs: Date.now() - start };
+      return {
+        toolName: 'bridge_send_alert',
+        success: false,
+        output: '',
+        error: `Failed to send alert: ${error instanceof Error ? error.message : String(error)}`,
+        durationMs: Date.now() - start,
+      };
     }
   },
 };
@@ -267,9 +409,20 @@ const bridgeStatusTool: Tool = {
         },
       };
 
-      return { toolName: 'bridge_status', success: true, output: JSON.stringify(status, null, 2), durationMs: Date.now() - start };
+      return {
+        toolName: 'bridge_status',
+        success: true,
+        output: JSON.stringify(status, null, 2),
+        durationMs: Date.now() - start,
+      };
     } catch (error) {
-      return { toolName: 'bridge_status', success: false, output: '', error: `Failed to check status: ${error instanceof Error ? error.message : String(error)}`, durationMs: Date.now() - start };
+      return {
+        toolName: 'bridge_status',
+        success: false,
+        output: '',
+        error: `Failed to check status: ${error instanceof Error ? error.message : String(error)}`,
+        durationMs: Date.now() - start,
+      };
     }
   },
 };
@@ -288,12 +441,24 @@ const bridgeSetWebhookTool: Tool = {
     try {
       const url = args.url as string;
       if (!url) {
-        return { toolName: 'bridge_set_webhook', success: false, output: '', error: 'url is required', durationMs: Date.now() - start };
+        return {
+          toolName: 'bridge_set_webhook',
+          success: false,
+          output: '',
+          error: 'url is required',
+          durationMs: Date.now() - start,
+        };
       }
 
       const botToken = pluginConfig.telegramBotToken as string;
       if (!botToken) {
-        return { toolName: 'bridge_set_webhook', success: false, output: '', error: 'Telegram not configured. Set telegramBotToken.', durationMs: Date.now() - start };
+        return {
+          toolName: 'bridge_set_webhook',
+          success: false,
+          output: '',
+          error: 'Telegram not configured. Set telegramBotToken.',
+          durationMs: Date.now() - start,
+        };
       }
 
       const response = await fetch(
@@ -306,13 +471,30 @@ const bridgeSetWebhookTool: Tool = {
       );
 
       if (!response.ok) {
-        return { toolName: 'bridge_set_webhook', success: false, output: '', error: `Telegram API error: ${response.status}`, durationMs: Date.now() - start };
+        return {
+          toolName: 'bridge_set_webhook',
+          success: false,
+          output: '',
+          error: `Telegram API error: ${response.status}`,
+          durationMs: Date.now() - start,
+        };
       }
 
       const data = await response.json();
-      return { toolName: 'bridge_set_webhook', success: true, output: JSON.stringify(data), durationMs: Date.now() - start };
+      return {
+        toolName: 'bridge_set_webhook',
+        success: true,
+        output: JSON.stringify(data),
+        durationMs: Date.now() - start,
+      };
     } catch (error) {
-      return { toolName: 'bridge_set_webhook', success: false, output: '', error: `Failed to set webhook: ${error instanceof Error ? error.message : String(error)}`, durationMs: Date.now() - start };
+      return {
+        toolName: 'bridge_set_webhook',
+        success: false,
+        output: '',
+        error: `Failed to set webhook: ${error instanceof Error ? error.message : String(error)}`,
+        durationMs: Date.now() - start,
+      };
     }
   },
 };
