@@ -1,6 +1,6 @@
 {
   "name": "cortex-plugin-whatsapp-telegram",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lightweight messaging bridge for quick queries and notifications",
   "kind": "esm",
   "entryPoint": "mod.ts",
@@ -8,7 +8,7 @@
   "author": "CortexPrism",
   "license": "MIT",
   "repository": "https://github.com/CortexPrism/cortex-plugin-whatsapp-telegram",
-  "homepage": "",
+  "homepage": "https://github.com/CortexPrism/cortex-plugin-whatsapp-telegram",
   "capabilities": [
     "tools",
     "network:fetch"
@@ -53,7 +53,11 @@
           "type": "string",
           "description": "Message parse mode",
           "required": false,
-          "enum": ["HTML", "Markdown", "text"],
+          "enum": [
+            "HTML",
+            "Markdown",
+            "text"
+          ],
           "default": "text"
         }
       ]
@@ -92,7 +96,11 @@
           "type": "string",
           "description": "Alert priority level",
           "required": true,
-          "enum": ["info", "warning", "critical"]
+          "enum": [
+            "info",
+            "warning",
+            "critical"
+          ]
         },
         {
           "name": "platforms",
@@ -121,31 +129,35 @@
     }
   ],
   "ui": {
-    "section": "Messaging Bridge",
-    "fields": [
+    "settings": [
       {
-        "key": "whatsappApiKey",
-        "label": "WhatsApp API Key",
-        "type": "secret",
-        "description": "WhatsApp Business API key"
-      },
-      {
-        "key": "whatsappPhoneId",
-        "label": "WhatsApp Phone ID",
-        "type": "text",
-        "description": "WhatsApp phone number ID"
-      },
-      {
-        "key": "telegramBotToken",
-        "label": "Telegram Bot Token",
-        "type": "secret",
-        "description": "Telegram bot token from BotFather"
-      },
-      {
-        "key": "telegramDefaultChatId",
-        "label": "Telegram Default Chat ID",
-        "type": "text",
-        "description": "Default Telegram chat ID for messages"
+        "section": "Messaging Bridge",
+        "fields": [
+          {
+            "key": "whatsappApiKey",
+            "label": "WhatsApp API Key",
+            "type": "secret",
+            "description": "WhatsApp Business API key"
+          },
+          {
+            "key": "whatsappPhoneId",
+            "label": "WhatsApp Phone ID",
+            "type": "text",
+            "description": "WhatsApp phone number ID"
+          },
+          {
+            "key": "telegramBotToken",
+            "label": "Telegram Bot Token",
+            "type": "secret",
+            "description": "Telegram bot token from BotFather"
+          },
+          {
+            "key": "telegramDefaultChatId",
+            "label": "Telegram Default Chat ID",
+            "type": "text",
+            "description": "Default Telegram chat ID for messages"
+          }
+        ]
       }
     ]
   },
@@ -154,7 +166,9 @@
     "cortex": ">=1.0.0"
   },
   "aiDisclosure": {
-    "tools": ["Claude Code (Anthropic)"],
+    "tools": [
+      "Claude Code (Anthropic)"
+    ],
     "humanReview": true
   }
 }
