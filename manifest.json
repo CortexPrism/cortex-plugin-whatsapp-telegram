@@ -1,6 +1,6 @@
 {
   "name": "cortex-plugin-whatsapp-telegram",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight messaging bridge for quick queries and notifications",
   "kind": "esm",
   "entryPoint": "mod.ts",
@@ -58,7 +58,7 @@
             "Markdown",
             "text"
           ],
-          "default": "text"
+          "defaultValue": "text"
         }
       ]
     },
@@ -77,7 +77,7 @@
           "type": "number",
           "description": "Maximum number of messages",
           "required": false,
-          "default": 20
+          "defaultValue": 20
         }
       ]
     },
@@ -163,7 +163,7 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "cortex": ">=1.0.0"
+    "cortex": ">=0.51.0"
   },
   "aiDisclosure": {
     "tools": [
